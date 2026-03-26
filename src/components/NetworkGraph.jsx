@@ -30,6 +30,8 @@ export default function NetworkGraph({
 
   // Custom canvas node renderer with glow effect
   const nodeCanvasObject = useCallback((node, ctx, globalScale) => {
+    if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
+    
     const color   = getCommunityColor(node.community)
     const radius  = node.val ?? 5
     const isDimmed = highlightCommunity !== null && node.community !== highlightCommunity
@@ -71,6 +73,7 @@ export default function NetworkGraph({
   }, [highlightCommunity])
 
   const nodePointerAreaPaint = useCallback((node, color, ctx) => {
+    if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
     ctx.beginPath()
     ctx.arc(node.x, node.y, (node.val ?? 5) + 3, 0, 2 * Math.PI)
     ctx.fillStyle = color
@@ -123,7 +126,7 @@ export default function NetworkGraph({
         graphData={{ nodes, links }}
         width={dimensions.width}
         height={dimensions.height}
-        backgroundColor="transparent"
+        backgroundColor="#020408"
         nodeCanvasObject={nodeCanvasObject}
         nodePointerAreaPaint={nodePointerAreaPaint}
         onNodeClick={handleNodeClick}

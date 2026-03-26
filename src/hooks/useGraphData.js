@@ -21,7 +21,8 @@ export function getCommunityColor(communityId) {
 // ── Main hook ───────────────────────────────────────────────────────────────
 export function useGraphData() {
   return useMemo(() => {
-    const { nodes, links } = rawData
+    const nodes = JSON.parse(JSON.stringify(rawData.nodes))
+    const links = JSON.parse(JSON.stringify(rawData.links))
 
     // Top 10 by PageRank
     const top10PageRank = [...nodes]
