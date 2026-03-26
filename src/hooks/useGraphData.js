@@ -24,24 +24,29 @@ export function useGraphData() {
     const nodes = JSON.parse(JSON.stringify(rawData.nodes))
     const links = JSON.parse(JSON.stringify(rawData.links))
 
-    // Top 10 by PageRank
-    const top10PageRank = [...nodes]
-      .sort((a, b) => b.pagerank - a.pagerank)
+    // Top 10 by Betweenness
+    const top10Betweenness = [...nodes]
+      .sort((a, b) => b.betweenness - a.betweenness)
       .slice(0, 10)
 
     // Max values for normalizing progress bars
-    const maxPagerank    = Math.max(...nodes.map(n => n.pagerank))
-    const maxBetweenness = Math.max(...nodes.map(n => n.betweenness))
-    const maxDegree      = Math.max(...nodes.map(n => n.degree))
+    const maxBetweenness      = Math.max(...nodes.map(n => n.betweenness))
+    const maxDegree           = Math.max(...nodes.map(n => n.degree))
+    const maxDegreeCentrality = Math.max(...nodes.map(n => n.degree_centrality))
+    const maxClustering       = Math.max(...nodes.map(n => n.clustering))
 
     // Unique communities with label derived from members' categories
     const communityMap = {}
     nodes.forEach(n => {
-      if (!communityMap[n.community]) {
-        communityMap[n.community] = { id: n.community, members: [], categories: [] }
+      // Restore dynamic node sizing (scaling from 5 to roughly 30 based on degree and betweenness)
+      n.val = Math.max(5, 5 + (n.degree / maxDegree) * 15 + (n.betweenness / maxBetweenness) * 10);
+      
+      const groupId = n.group !== undefined ? n.group : 0;
+      if (!communityMap[groupId]) {
+        communityMap[groupId] = { id: groupId, members: [], categories: [] }
       }
-      communityMap[n.community].members.push(n.label)
-      communityMap[n.community].categories.push(n.category)
+      communityMap[groupId].members.push(n.label)
+      communityMap[groupId].categories.push(n.category || `Comunidad ${groupId}`)
     })
 
     // Label each community by its most common category
@@ -57,6 +62,6 @@ export function useGraphData() {
       }
     }).sort((a, b) => a.id - b.id)
 
-    return { nodes, links, top10PageRank, maxPagerank, maxBetweenness, maxDegree, communities }
+    return { nodes, links, top10Betweenness, maxBetweenness, maxDegree, maxDegreeCentrality, maxClustering, communities }
   }, [])
 }

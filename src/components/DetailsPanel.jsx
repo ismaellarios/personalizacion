@@ -27,8 +27,8 @@ function MetricBar({ label, value, maxValue, color }) {
   )
 }
 
-export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness, maxDegree, communities }) {
-  const community = communities.find(c => c.id === selectedNode?.community)
+export default function DetailsPanel({ selectedNode, maxBetweenness, maxDegree, maxDegreeCentrality, maxClustering, communities }) {
+  const community = communities.find(c => c.id === selectedNode?.group)
 
   return (
     <div
@@ -69,7 +69,7 @@ export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
           }}>
-            PageRank · Betweenness · Degree
+            Degree Centrality · Betweenness · Clustering
           </div>
         </div>
       ) : (
@@ -87,7 +87,6 @@ export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness
             {selectedNode.label}
           </div>
 
-          {/* Category + Community badge */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
             <span className="community-badge" style={{
               color: community?.color ?? '#94a3b8',
@@ -100,14 +99,7 @@ export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness
                 flexShrink: 0,
                 boxShadow: `0 0 6px ${community?.color ?? '#94a3b8'}`,
               }} />
-              {community?.label ?? `Comunidad ${selectedNode.community}`}
-            </span>
-            <span className="community-badge" style={{
-              color: 'var(--text-secondary)',
-              borderColor: 'rgba(148,163,184,0.2)',
-              background: 'rgba(148,163,184,0.05)',
-            }}>
-              {selectedNode.category}
+              {community?.label ?? `Comunidad ${selectedNode.group}`}
             </span>
           </div>
 
@@ -116,9 +108,9 @@ export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness
 
           {/* Metric bars */}
           <MetricBar
-            label="PageRank"
-            value={selectedNode.pagerank}
-            maxValue={maxPagerank}
+            label="Degree Centrality"
+            value={selectedNode.degree_centrality}
+            maxValue={maxDegreeCentrality}
             color="#00f5ff"
           />
           <MetricBar
@@ -126,6 +118,12 @@ export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness
             value={selectedNode.betweenness}
             maxValue={maxBetweenness}
             color="#a855f7"
+          />
+          <MetricBar
+            label="Clustering Coeff."
+            value={selectedNode.clustering}
+            maxValue={maxClustering}
+            color="#34d399"
           />
           <MetricBar
             label="Degree (Grado)"
@@ -146,7 +144,7 @@ export default function DetailsPanel({ selectedNode, maxPagerank, maxBetweenness
             lineHeight: 1.7,
           }}>
             <span style={{ color: 'var(--purple)', fontWeight: 600 }}>
-              Comunidad #{selectedNode.community}
+              Comunidad #{selectedNode.group}
             </span>
             {' '}— miembro de la red <em>{community?.label}</em> con{' '}
             <span style={{ color: '#e2e8f0' }}>{selectedNode.degree} conexiones directas</span>.

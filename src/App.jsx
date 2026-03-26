@@ -5,13 +5,14 @@ import TitlePanel from './components/TitlePanel'
 import MetricsPanel from './components/MetricsPanel'
 import DetailsPanel from './components/DetailsPanel'
 import LegendPanel from './components/LegendPanel'
+import ScatteredInfoPanels from './components/ScatteredInfoPanels'
 
 export default function App() {
-  const { nodes, links, top10PageRank, maxPagerank, maxBetweenness, maxDegree, communities } =
+  const { nodes, links, top10Betweenness, maxBetweenness, maxDegree, maxDegreeCentrality, maxClustering, communities } =
     useGraphData()
-
   const [selectedNode, setSelectedNode] = useState(null)
   const [highlightCommunity, setHighlightCommunity] = useState(null)
+  const [activeSection, setActiveSection] = useState(null)
 
   const handleNodeClick = useCallback((node) => {
     setSelectedNode(node)
@@ -25,34 +26,52 @@ export default function App() {
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
 
       {/* ── Background: Interactive Force Graph ── */}
-      <NetworkGraph
-        nodes={nodes}
-        links={links}
-        onNodeClick={handleNodeClick}
-        highlightCommunity={highlightCommunity}
-      />
+      <div style={{
+        width: '100%',
+        height: '100%',
+        transform: activeSection !== null ? 'translateX(25vw)' : 'translateX(0)',
+        transition: 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
+      }}>
+        <NetworkGraph
+          nodes={nodes}
+          links={links}
+          onNodeClick={handleNodeClick}
+          highlightCommunity={highlightCommunity}
+        />
+      </div>
 
-      {/* ── Overlay: Title Panel (top center) ── */}
-      <TitlePanel />
+      {/* ── Standard UI Overlays (hidden during presentation viewing) ── */}
+      <div style={{
+        opacity: activeSection !== null ? 0 : 1,
+        transition: 'opacity 0.4s ease',
+        pointerEvents: activeSection !== null ? 'none' : 'auto'
+      }}>
+        {/* ── Overlay: Title Panel (top center) ── */}
+        <TitlePanel />
 
-      {/* ── Overlay: Metrics Panel (left) ── */}
-      <MetricsPanel top10={top10PageRank} />
+        {/* ── Overlay: Metrics Panel (left) ── */}
+        <MetricsPanel top10={top10Betweenness} />
 
-      {/* ── Overlay: Details Panel (right) ── */}
-      <DetailsPanel
-        selectedNode={selectedNode}
-        maxPagerank={maxPagerank}
-        maxBetweenness={maxBetweenness}
-        maxDegree={maxDegree}
-        communities={communities}
-      />
+        {/* ── Overlay: Details Panel (right) ── */}
+        <DetailsPanel
+          selectedNode={selectedNode}
+          maxDegreeCentrality={maxDegreeCentrality}
+          maxBetweenness={maxBetweenness}
+          maxClustering={maxClustering}
+          maxDegree={maxDegree}
+          communities={communities}
+        />
 
-      {/* ── Overlay: Legend Panel (bottom center) ── */}
-      <LegendPanel
-        communities={communities}
-        highlightCommunity={highlightCommunity}
-        onToggle={handleCommunityToggle}
-      />
+        {/* ── Overlay: Legend Panel (bottom center) ── */}
+        <LegendPanel
+          communities={communities}
+          highlightCommunity={highlightCommunity}
+          onToggle={handleCommunityToggle}
+        />
+      </div>
+
+      {/* ── Overlay: Scattered Presentation Panels & Left Panel ── */}
+      <ScatteredInfoPanels activeSection={activeSection} setActiveSection={setActiveSection} />
     </div>
   )
 }

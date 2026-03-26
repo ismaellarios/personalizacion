@@ -32,9 +32,9 @@ export default function NetworkGraph({
   const nodeCanvasObject = useCallback((node, ctx, globalScale) => {
     if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
     
-    const color   = getCommunityColor(node.community)
+    const color   = getCommunityColor(node.group)
     const radius  = node.val ?? 5
-    const isDimmed = highlightCommunity !== null && node.community !== highlightCommunity
+    const isDimmed = highlightCommunity !== null && node.group !== highlightCommunity
 
     // Glow halo (only for non-dimmed)
     if (!isDimmed) {
@@ -107,11 +107,11 @@ export default function NetworkGraph({
   // Link color
   const linkColor = useCallback((link) => {
     if (highlightCommunity === null) return 'rgba(0, 245, 255, 0.12)'
-    const sourceNode = typeof link.source === 'object' ? link.source : { community: -1 }
-    const targetNode = typeof link.target === 'object' ? link.target : { community: -1 }
+    const sourceNode = typeof link.source === 'object' ? link.source : { group: -1 }
+    const targetNode = typeof link.target === 'object' ? link.target : { group: -1 }
     const isHighlighted =
-      sourceNode.community === highlightCommunity &&
-      targetNode.community === highlightCommunity
+      sourceNode.group === highlightCommunity &&
+      targetNode.group === highlightCommunity
     return isHighlighted ? 'rgba(0, 245, 255, 0.4)' : 'rgba(50, 60, 80, 0.15)'
   }, [highlightCommunity])
 
@@ -163,7 +163,7 @@ export default function NetworkGraph({
         >
           {hoveredNode.label}
           <span style={{ marginLeft: 8, opacity: 0.6, fontSize: '0.65rem' }}>
-            PR: {hoveredNode.pagerank?.toFixed(4)}
+            BC: {hoveredNode.betweenness?.toFixed(4)} | DC: {hoveredNode.degree_centrality?.toFixed(4)}
           </span>
         </div>
       )}

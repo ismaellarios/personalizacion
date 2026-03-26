@@ -17,7 +17,7 @@ const CustomTooltip = ({ active, payload }) => {
         color: 'var(--cyan)',
       }}>
         <div style={{ fontWeight: 700, marginBottom: 2 }}>{d.label}</div>
-        <div>PageRank: <strong>{d.pagerank.toFixed(5)}</strong></div>
+        <div>Betweenness: <strong>{d.betweenness.toFixed(5)}</strong></div>
         <div style={{ color: 'var(--text-secondary)' }}>Grado: {d.degree}</div>
       </div>
     )
@@ -26,11 +26,11 @@ const CustomTooltip = ({ active, payload }) => {
 }
 
 export default function MetricsPanel({ top10 }) {
-  // Format for recharts horizontal bar: value is pagerank * 1000 for readability
+  // Format for recharts horizontal bar: value is betweenness * 1000 for readability
   const data = top10.map(n => ({
     ...n,
     name: n.label.length > 12 ? n.label.slice(0, 12) + '…' : n.label,
-    value: +(n.pagerank * 1000).toFixed(3),
+    value: +(n.betweenness * 1000).toFixed(3),
   }))
 
   return (
@@ -49,7 +49,7 @@ export default function MetricsPanel({ top10 }) {
     >
       <div className="section-heading">
         <TrendingUp size={12} />
-        Top 10 · PageRank
+        Top 10 · Betweenness
       </div>
 
       <ResponsiveContainer width="100%" height={260}>
@@ -76,7 +76,7 @@ export default function MetricsPanel({ top10 }) {
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,245,255,0.05)' }} />
           <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={14}>
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={getCommunityColor(entry.community)} />
+              <Cell key={`cell-${index}`} fill={getCommunityColor(entry.group)} />
             ))}
           </Bar>
         </BarChart>
@@ -91,7 +91,7 @@ export default function MetricsPanel({ top10 }) {
       }}>
         {[
           { label: 'Nodos', value: 40 },
-          { label: 'Aristas', value: 70 },
+          { label: 'Aristas', value: 71 },
         ].map(({ label, value }) => (
           <div key={label} style={{
             background: 'rgba(0,245,255,0.05)',
