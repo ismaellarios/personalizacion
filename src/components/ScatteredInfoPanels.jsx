@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Target, BarChart2, Crosshair, Users, X, ChevronRight, ChevronLeft, Maximize2 } from 'lucide-react'
+import imgChart1 from '../assets/3_picture1.png'
+import imgChart2 from '../assets/3_picture2.png'
 
 export default function ScatteredInfoPanels({
   activeSection,
@@ -129,19 +131,19 @@ export default function ScatteredInfoPanels({
           <div style={{ display: 'flex', gap: '15px', marginTop: '15px', justifyContent: 'center' }}>
             <div
               className="zoom-card"
-              onClick={() => setEnlargedImage({ src: '/3_picture1.png', title: 'Distribución de Grados' })}
+              onClick={() => setEnlargedImage({ src: imgChart1, title: 'Distribución de Grados' })}
               style={{ flex: 1, background: '#fff', padding: '10px', borderRadius: '12px', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '240px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
             >
               <div className="zoom-icon"><Maximize2 size={14} /></div>
-              <img src="/3_picture1.png" alt="Métricas 1" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
+              <img src={imgChart1} alt="Métricas 1" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
             <div
               className="zoom-card"
-              onClick={() => setEnlargedImage({ src: '/3_picture2.png', title: 'Comparativa de Centralidades' })}
+              onClick={() => setEnlargedImage({ src: imgChart2, title: 'Comparativa de Centralidades' })}
               style={{ flex: 1, background: '#fff', padding: '10px', borderRadius: '12px', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '240px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
             >
               <div className="zoom-icon"><Maximize2 size={14} /></div>
-              <img src="/3_picture2.png" alt="Métricas 2" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
+              <img src={imgChart2} alt="Métricas 2" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
           </div>
         </div>
