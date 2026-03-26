@@ -1,82 +1,168 @@
 import { Target, BarChart2, Crosshair, Users, X, ChevronRight, ChevronLeft } from 'lucide-react'
 
-const sections = [
-  {
-    id: 0,
-    buttonPos: { top: 16, left: 16 },
-    title: 'Persona 1: Introducción',
-    shortTitle: 'Introducción',
-    icon: <Target size={20} />,
-    color: 'var(--cyan)',
-    content: (
-      <div className="script-content">
-        <p>“Hola, somos [nombres del equipo] y hoy vamos a presentar nuestro análisis de la red de YouTube hispano.</p>
-        <p>La idea principal de este trabajo fue estudiar cómo se conectan los creadores entre sí. Muchas veces vemos un canal por separado, pero aquí quisimos mirar el conjunto completo, como una red.</p>
-        <p>En esta red, cada canal es un nodo y cada relación entre canales es una conexión. Con eso, podemos responder preguntas como:<br/>
-        • qué canales son más importantes,<br/>
-        • qué canales unen grupos,<br/>
-        • y cómo se organiza toda la comunidad.</p>
-        <p>Nuestro objetivo fue entender no solo quién tiene más conexiones, sino también quién ocupa una posición clave dentro de la red.</p>
-        <p>Ahora vamos a explicar cómo hicimos el análisis y qué resultados encontramos.”</p>
-      </div>
-    )
-  },
-  {
-    id: 1,
-    buttonPos: { top: 16, right: 16 },
-    title: 'Persona 2: Metodología',
-    shortTitle: 'Metodología',
-    icon: <BarChart2 size={20} />,
-    color: '#34d399',
-    content: (
-      <div className="script-content">
-        <p>“Primero cargamos los datos desde un archivo de red. Después revisamos datos básicos: número de nodos, número de conexiones y tipo de red.</p>
-        <p>Luego calculamos métricas globales para entender la red completa. Por ejemplo, medimos densidad, componentes, distancia media y diámetro. Estas métricas nos ayudan a saber si la red está muy conectada o si está separada en partes.</p>
-        <p>También estudiamos el grado de cada nodo. El grado es cuántas conexiones tiene cada canal. Así vimos qué nodos tienen pocas conexiones y cuáles tienen muchas.</p>
-        <p>Después aplicamos centralidades, sobre todo degree y betweenness. Degree nos dice qué nodos están más conectados. Betweenness nos dice qué nodos están en medio de muchos caminos y conectan grupos.</p>
-        <p>Finalmente usamos Louvain para detectar comunidades. Eso nos permitió encontrar grupos de canales que están más conectados entre sí.”</p>
-      </div>
-    )
-  },
-  {
-    id: 2,
-    buttonPos: { bottom: 16, left: 16 },
-    title: 'Persona 3: Resultados principales',
-    shortTitle: 'Resultados',
-    icon: <Crosshair size={20} />,
-    color: '#f59e0b',
-    content: (
-      <div className="script-content">
-        <p>“Los resultados muestran varias cosas importantes.</p>
-        <p>Primero, no todos los nodos cumplen el mismo papel. Algunos tienen muchas conexiones y otros tienen menos, pero aun así son clave porque unen comunidades.</p>
-        <p>Segundo, encontramos nodos puente. Un nodo puente es un canal que conecta grupos distintos. Si ese nodo desaparece, la comunicación entre grupos se vuelve más difícil.</p>
-        <p>Tercero, detectamos comunidades claras dentro de la red. Eso significa que hay grupos de canales que comparten más relaciones entre ellos que con el resto.</p>
-        <p>También vimos que la red tiene una estructura desigual: hay pocos nodos muy importantes y muchos nodos más pequeños. Este patrón es común en redes sociales reales.</p>
-        <p>En resumen, no basta con mirar el tamaño de un canal. Su posición en la red también influye mucho en su impacto.”</p>
-      </div>
-    )
-  },
-  {
-    id: 3,
-    buttonPos: { bottom: 16, right: 16 },
-    title: 'Persona 4: Conclusión y cierre',
-    shortTitle: 'Conclusión',
-    icon: <Users size={20} />,
-    color: '#a855f7',
-    content: (
-      <div className="script-content">
-        <p>“Como conclusión, este análisis muestra que YouTube hispano funciona como un sistema conectado.</p>
-        <p>La red no está formada por canales aislados. Está formada por grupos, conexiones y nodos que hacen de enlace.</p>
-        <p>Por eso, entender la estructura de la red ayuda a explicar mejor cómo se mueve la información y por qué algunos canales tienen más alcance que otros.</p>
-        <p>También hay limitaciones. Este análisis es una foto de un momento específico y no incluye cambios en el tiempo. Como mejora futura, sería útil agregar datos temporales y métricas de interacción, como comentarios o participación.</p>
-        <p>Para terminar, nuestra idea principal es esta: en una red social, importa tanto cuántas conexiones tienes como dónde estás ubicado en la red.</p>
-        <p>Muchas gracias por escuchar. Ahora, si quieren, respondemos preguntas.”</p>
-      </div>
-    )
-  }
-]
+export default function ScatteredInfoPanels({
+  activeSection,
+  setActiveSection,
+  viewMode,
+  setViewMode,
+  highlightCommunity,
+  setHighlightCommunity,
+  highlightNodes,
+  setHighlightNodes
+}) {
 
-export default function ScatteredInfoPanels({ activeSection, setActiveSection }) {
+  const sections = [
+    {
+      id: 0,
+      buttonPos: { top: 16, left: 16 },
+      title: 'Persona 1: Introducción',
+      shortTitle: 'Introducción',
+      icon: <Target size={20} />,
+      color: 'var(--cyan)',
+      content: (
+        <div className="script-content presentation-mode">
+          <ul className="talking-points">
+            <li><strong>Presentación:</strong> Nombres del equipo y objetivo principal.</li>
+            <li><strong>El enfoque:</strong> YouTube Hispano como un <em>sistema vivo</em>, no canales aislados.</li>
+            <li><strong>Conceptos clave:</strong> Nodos (canales) y Conexiones (relaciones).</li>
+            <li><strong>Preguntas clave:</strong>
+              <ul>
+                <li>¿Quiénes son más importantes?</li>
+                <li>¿Quiénes unen mundos distintos?</li>
+                <li>¿Cómo se organiza la comunidad?</li>
+              </ul>
+            </li>
+            <li><strong>Valor añadido:</strong> Identificar posiciones estratégicas en la red.</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      id: 1,
+      buttonPos: { top: 16, right: 16 },
+      title: 'Persona 2: Metodología',
+      shortTitle: 'Metodología',
+      icon: <BarChart2 size={20} />,
+      color: '#34d399',
+      content: (
+        <div className="script-content presentation-mode">
+          <ul className="talking-points">
+            <li><strong>Ingesta de datos:</strong> Carga de archivo de red y limpieza básica.</li>
+            <li><strong>Visión global:</strong> Cálculo de Densidad, Componentes, Distancia y Diámetro.</li>
+            <li><strong>Análisis de Grado:</strong> ¿Cuántas conexiones tiene cada uno? (Distribución desigual).</li>
+            <li><strong>Métricas de Centralidad:</strong>
+              <ul>
+                <li><em>Degree:</em> El más conectado.</li>
+                <li><em>Betweenness:</em> El "puente" estratégico.</li>
+              </ul>
+            </li>
+            <li><strong>Community Detection:</strong> Algoritmo de Louvain para encontrar grupos internos.</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      id: 2,
+      buttonPos: { bottom: 16, left: 16 },
+      title: 'Persona 3: Resultados principales',
+      shortTitle: 'Resultados',
+      icon: <Crosshair size={20} />,
+      color: '#f59e0b',
+      content: (
+        <div className="script-content presentation-mode">
+          <ul className="talking-points">
+            <li><strong>Diversidad de roles:</strong> No todos los canales con pocos subs son irrelevantes.</li>
+            <li><strong>El poder del puente:</strong> Los canales que conectan comunidades separadas.</li>
+            <li><strong>Estructura modular:</strong> Identificación de nichos cerrados muy fuertes.</li>
+            <li><strong>Ley de potencia:</strong> Pocos "Hubs" masivos frente a una "Larga cola" de pequeños.</li>
+            <li><strong>Impacto:</strong> La posición en la red pesa tanto o más que el número de seguidores.</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      id: 3,
+      buttonPos: { bottom: 16, right: 16 },
+      title: 'Comunidades, interpretación y conclusión',
+      shortTitle: 'Comunidades y Conclusión',
+      icon: <Users size={20} />,
+      color: '#a855f7',
+      content: (
+        <div className="script-content presentation-mode">
+
+          <div className="slide-block">
+            <button
+              className={`interactive-btn ${viewMode === 'louvain' ? 'active' : ''}`}
+              onClick={() => setViewMode('louvain')}
+            >
+              <Users size={16} /> Mostrar Comunidades (Louvain)
+            </button>
+            <ul className="talking-points mini">
+              <li>Modularidad: <strong>0,60</strong> (Red fuertemente sectorizada).</li>
+              <li>Detección: <strong>5 grandes bloques</strong> temáticos.</li>
+            </ul>
+          </div>
+
+          <div className="slide-block">
+            <p style={{ marginBottom: '10px', fontSize: '1rem', fontWeight: 600 }}>Nichos detectados (Hover para resaltar):</p>
+            <div className="community-pills">
+              <button className="pill-btn science" onMouseEnter={() => setHighlightCommunity(2)} onMouseLeave={() => setHighlightCommunity(null)}>Ciencia y Tech</button>
+              <button className="pill-btn latam" onMouseEnter={() => setHighlightCommunity(1)} onMouseLeave={() => setHighlightCommunity(null)}>Núcleo LATAM</button>
+              <button className="pill-btn gaming" onMouseEnter={() => setHighlightCommunity(4)} onMouseLeave={() => setHighlightCommunity(null)}>Gaming Clásico</button>
+              <button className="pill-btn irl" onMouseEnter={() => setHighlightCommunity(0)} onMouseLeave={() => setHighlightCommunity(null)}>IRL y Eventos</button>
+              <button className="pill-btn variety" onMouseEnter={() => setHighlightCommunity(3)} onMouseLeave={() => setHighlightCommunity(null)}>Variety</button>
+            </div>
+          </div>
+
+          <div className="slide-block">
+            <button
+              className={`interactive-btn ${highlightNodes ? 'active' : ''}`}
+              style={{ background: '#3b82f6' }}
+              onClick={() => {
+                const cliqueNodes = ['QuantumFracture', 'Javier Santaolalla', 'La Gata de Schrodinger'];
+                setHighlightNodes(highlightNodes ? null : cliqueNodes);
+              }}
+            >
+              <Target size={16} /> Ver Clique: Ciencia y Divulgación
+            </button>
+            <ul className="talking-points mini">
+              <li>Subgrupos: <strong>39 cliques</strong> encontrados.</li>
+              <li>Ejemplo: Trío de Física y Divulgación.</li>
+            </ul>
+          </div>
+
+          <div className="slide-block">
+            <button
+              className={`interactive-btn ${viewMode === 'betweenness' ? 'active' : ''}`}
+              onClick={() => setViewMode('betweenness')}
+            >
+              <Target size={16} /> Destacar Nodos Puente (Betweenness)
+            </button>
+            <p style={{ marginTop: '10px', fontSize: '1.1rem' }}>Canales aislados vs <strong>Estratégicos (Ibai, Jordi Wild)</strong>.</p>
+          </div>
+
+          <div className="slide-block final">
+            <ul className="talking-points">
+              <li><strong>Limitaciones:</strong> Foto fija, sin evolución temporal.</li>
+              <li><strong>Conclusión:</strong> Estructura jerarquizada y estable.</li>
+              <li><strong>Idea Fuerza:</strong> Matemática de una red social madura.</li>
+            </ul>
+          </div>
+
+          <div style={{ marginTop: '20px', borderTop: '1px solid #ffffff22', paddingTop: '15px' }}>
+            <button
+              className={`interactive-btn outline ${viewMode === 'normal' ? 'active' : ''}`}
+              onClick={() => { setViewMode('normal'); setHighlightCommunity(null); setHighlightNodes(null); }}
+            >
+              <Crosshair size={16} /> Restablecer vista
+            </button>
+          </div>
+
+        </div>
+      )
+    }
+  ];
+
   const isPanelOpen = activeSection !== null;
   const activeData = isPanelOpen ? sections[activeSection] : null;
 
@@ -142,17 +228,17 @@ export default function ScatteredInfoPanels({ activeSection, setActiveSection })
       >
         {activeData && (
           <div className="animate-fadein" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            
+
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ color: activeData.color, background: `${activeData.color}15`, padding: 12, borderRadius: 12 }}>
                   {activeData.icon}
                 </div>
-                <h2 style={{ 
-                  margin: 0, 
-                  fontSize: '2rem', 
-                  color: '#fff', 
+                <h2 style={{
+                  margin: 0,
+                  fontSize: '2rem',
+                  color: '#fff',
                   fontFamily: 'Orbitron, sans-serif',
                   textShadow: `0 0 10px ${activeData.color}55`
                 }}>
@@ -187,10 +273,10 @@ export default function ScatteredInfoPanels({ activeSection, setActiveSection })
             </div>
 
             {/* Script Text */}
-            <div style={{ 
-              flex: 1, 
-              fontSize: '1.25rem', 
-              lineHeight: 1.8, 
+            <div style={{
+              flex: 1,
+              fontSize: '1.25rem',
+              lineHeight: 1.8,
               color: '#cbd5e1',
               fontFamily: 'Inter, sans-serif'
             }}>
@@ -198,9 +284,9 @@ export default function ScatteredInfoPanels({ activeSection, setActiveSection })
             </div>
 
             {/* Navigation Controls */}
-            <div style={{ 
-              marginTop: 40, 
-              paddingTop: 24, 
+            <div style={{
+              marginTop: 40,
+              paddingTop: 24,
               borderTop: '1px solid rgba(255,255,255,0.1)',
               display: 'flex',
               justifyContent: 'space-between'
@@ -225,7 +311,7 @@ export default function ScatteredInfoPanels({ activeSection, setActiveSection })
               >
                 <ChevronLeft size={18} /> Anterior
               </button>
-              
+
               <button
                 disabled={activeSection === sections.length - 1}
                 onClick={() => setActiveSection(activeSection + 1)}
@@ -251,12 +337,139 @@ export default function ScatteredInfoPanels({ activeSection, setActiveSection })
           </div>
         )}
       </div>
-      
-      {/* Global styles for the script paragraphs */}
+
+      {/* Global styles for the script paragraphs and UI actions */}
       <style>{`
         .script-content p {
           margin-bottom: 24px;
         }
+        
+        .slide-block {
+          background: rgba(255, 255, 255, 0.03);
+          border-left: 3px solid rgba(255, 255, 255, 0.1);
+          padding: 16px 20px;
+          margin-bottom: 20px;
+          border-radius: 4px;
+          transition: all 0.3s;
+        }
+        
+        .slide-block:hover {
+          background: rgba(255, 255, 255, 0.05);
+          border-left-color: #a855f7;
+        }
+
+        .slide-block p {
+          margin-bottom: 0 !important;
+          font-size: 1.15rem;
+        }
+
+        .interactive-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: #a855f7;
+          color: white;
+          border: none;
+          padding: 10px 16px;
+          border-radius: 6px;
+          font-weight: 600;
+          font-family: 'Inter', sans-serif;
+          cursor: pointer;
+          margin-bottom: 12px;
+          transition: all 0.2s;
+          box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .interactive-btn:hover {
+          background: #c084fc;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .interactive-btn.outline {
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.3);
+          box-shadow: none;
+        }
+
+        .interactive-btn.outline:hover {
+          background: rgba(255,255,255,0.1);
+        }
+
+        .community-pills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 12px;
+        }
+
+        .pill-btn {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: white;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+          transform: scale(1.05);
+        }
+
+        .pill-btn.science:hover { background: #f59e0b; border-color: #f59e0b; }
+        .pill-btn.latam:hover { background: #a855f7; border-color: #a855f7; }
+        .pill-btn.gaming:hover { background: #f43f5e; border-color: #f43f5e; }
+        .pill-btn.irl:hover { background: #00f5ff; border-color: #00f5ff; color: black; font-weight: bold; }
+        .pill-btn.variety:hover { background: #22c55e; border-color: #22c55e; }
+
+        .talking-points {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .talking-points li {
+          position: relative;
+          padding-left: 24px;
+          margin-bottom: 15px;
+          font-size: 1.2rem;
+          line-height: 1.6;
+        }
+
+        .talking-points li::before {
+          content: '→';
+          position: absolute;
+          left: 0;
+          color: #a855f7;
+          font-weight: bold;
+        }
+
+        .talking-points.mini li {
+          font-size: 1rem;
+          margin-bottom: 8px;
+        }
+
+        .talking-points ul {
+          list-style: none;
+          padding-left: 20px;
+          margin-top: 5px;
+        }
+
+        .talking-points ul li {
+          font-size: 1rem;
+          margin-bottom: 5px;
+          opacity: 0.8;
+          padding-left: 15px;
+        }
+
+        .talking-points ul li::before {
+          content: '•';
+          color: rgba(255,255,255,0.4);
+        }
+
       `}</style>
     </>
   )

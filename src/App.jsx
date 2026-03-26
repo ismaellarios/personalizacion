@@ -12,11 +12,13 @@ export default function App() {
     useGraphData()
   const [selectedNode, setSelectedNode] = useState(null)
   const [highlightCommunity, setHighlightCommunity] = useState(null)
+  const [highlightNodes, setHighlightNodes] = useState(null) // Array of labels or IDs
   const [activeSection, setActiveSection] = useState(null)
-  const [viewMode, setViewMode] = useState('louvain')
+  const [viewMode, setViewMode] = useState('normal')
 
   const handleNodeClick = useCallback((node) => {
     setSelectedNode(node)
+    setHighlightNodes(null) // Clear set highlight on selection
   }, [])
 
   const handleCommunityToggle = useCallback((id) => {
@@ -38,6 +40,7 @@ export default function App() {
           links={links}
           onNodeClick={handleNodeClick}
           highlightCommunity={highlightCommunity}
+          highlightNodes={highlightNodes}
           viewMode={viewMode}
           maxBetweenness={maxBetweenness}
         />
@@ -74,7 +77,16 @@ export default function App() {
       </div>
 
       {/* ── Overlay: Scattered Presentation Panels & Left Panel ── */}
-      <ScatteredInfoPanels activeSection={activeSection} setActiveSection={setActiveSection} />
+      <ScatteredInfoPanels 
+        activeSection={activeSection} 
+        setActiveSection={setActiveSection}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        highlightCommunity={highlightCommunity}
+        setHighlightCommunity={setHighlightCommunity}
+        highlightNodes={highlightNodes}
+        setHighlightNodes={setHighlightNodes}
+      />
     </div>
   )
 }

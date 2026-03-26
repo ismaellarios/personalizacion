@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect, useState } from 'react'
+import { useRef, useCallback, useEffect, useState, useMemo } from 'react'
 import ForceGraph2D from 'react-force-graph-2d'
 import { getCommunityColor } from '../hooks/useGraphData'
 
@@ -7,11 +7,18 @@ export default function NetworkGraph({
   links,
   onNodeClick,
   highlightCommunity, // null | number
+  highlightNodes,     // null | string[]
   viewMode = 'louvain',
   maxBetweenness = 1
 }) {
   const graphRef = useRef(null)
   const containerRef = useRef(null)
+
+  // Memoize the highlight set for O(1) lookup in renderer
+  const highlightedSet = useMemo(() => 
+    highlightNodes ? new Set(highlightNodes) : null
+  , [highlightNodes])
+
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight })
   const [hoveredNode, setHoveredNode] = useState(null)
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
@@ -59,7 +66,9 @@ export default function NetworkGraph({
     }
 
     const radius  = node.val ?? 5
-    const isDimmed = highlightCommunity !== null && node.group !== highlightCommunity
+    const isDimmed = 
+      (highlightCommunity !== null && node.group !== highlightCommunity) ||
+      (highlightedSet !== null && !highlightedSet.has(node.label))
 
     // Glow halo (only for non-dimmed)
     if (!isDimmed) {
@@ -95,7 +104,7 @@ export default function NetworkGraph({
       ctx.fillStyle = isDimmed ? 'rgba(150,170,200,0.3)' : '#ffffff'
       ctx.fillText(label, node.x, node.y + radius + fontSize * 0.9)
     }
-  }, [highlightCommunity, viewMode, maxBetweenness])
+  }, [highlightCommunity, highlightedSet, viewMode, maxBetweenness])
 
   const nodePointerAreaPaint = useCallback((node, color, ctx) => {
     if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
@@ -131,14 +140,24 @@ export default function NetworkGraph({
 
   // Link color
   const linkColor = useCallback((link) => {
-    if (highlightCommunity === null) return 'rgba(0, 245, 255, 0.12)'
-    const sourceNode = typeof link.source === 'object' ? link.source : { group: -1 }
-    const targetNode = typeof link.target === 'object' ? link.target : { group: -1 }
-    const isHighlighted =
-      sourceNode.group === highlightCommunity &&
-      targetNode.group === highlightCommunity
-    return isHighlighted ? 'rgba(0, 245, 255, 0.4)' : 'rgba(50, 60, 80, 0.15)'
-  }, [highlightCommunity])
+    const sourceNode = typeof link.source === 'object' ? link.source : { label: '', group: -1 }
+    const targetNode = typeof link.target === 'object' ? link.target : { label: '', group: -1 }
+
+    // Case 1: Highlight Nodes
+    if (highlightedSet !== null) {
+      const isHighlighted = highlightedSet.has(sourceNode.label) && highlightedSet.has(targetNode.label)
+      return isHighlighted ? 'rgba(0, 245, 255, 0.6)' : 'rgba(50, 60, 80, 0.05)'
+    }
+
+    // Case 2: Highlight Community
+    if (highlightCommunity !== null) {
+      const isHighlighted = sourceNode.group === highlightCommunity && targetNode.group === highlightCommunity
+      return isHighlighted ? 'rgba(0, 245, 255, 0.4)' : 'rgba(50, 60, 80, 0.15)'
+    }
+
+    // Default
+    return 'rgba(0, 245, 255, 0.12)'
+  }, [highlightCommunity, highlightedSet])
 
   return (
     <div
