@@ -1,0 +1,690 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "label": "Ibai",
+      "category": "Streamer",
+      "community": 0,
+      "pagerank": 0.066109,
+      "betweenness": 0.608965,
+      "degree": 11,
+      "val": 15.0
+    },
+    {
+      "id": "2",
+      "label": "Auronplay",
+      "category": "Streamer",
+      "community": 0,
+      "pagerank": 0.025586,
+      "betweenness": 0.033349,
+      "degree": 4,
+      "val": 6.4
+    },
+    {
+      "id": "3",
+      "label": "Rubius",
+      "category": "Streamer",
+      "community": 4,
+      "pagerank": 0.048073,
+      "betweenness": 0.251279,
+      "degree": 8,
+      "val": 11.17
+    },
+    {
+      "id": "4",
+      "label": "IlloJuan",
+      "category": "Streamer",
+      "community": 2,
+      "pagerank": 0.040834,
+      "betweenness": 0.295347,
+      "degree": 6,
+      "val": 9.64
+    },
+    {
+      "id": "5",
+      "label": "ElXokas",
+      "category": "Streamer",
+      "community": 2,
+      "pagerank": 0.020891,
+      "betweenness": 0.014575,
+      "degree": 3,
+      "val": 5.41
+    },
+    {
+      "id": "6",
+      "label": "TheGrefg",
+      "category": "Streamer",
+      "community": 1,
+      "pagerank": 0.030858,
+      "betweenness": 0.050826,
+      "degree": 5,
+      "val": 7.52
+    },
+    {
+      "id": "7",
+      "label": "Willyrex",
+      "category": "Gaming Clasico",
+      "community": 4,
+      "pagerank": 0.036907,
+      "betweenness": 0.084439,
+      "degree": 6,
+      "val": 8.81
+    },
+    {
+      "id": "8",
+      "label": "Vegetta777",
+      "category": "Gaming Clasico",
+      "community": 4,
+      "pagerank": 0.026212,
+      "betweenness": 0.004768,
+      "degree": 4,
+      "val": 6.54
+    },
+    {
+      "id": "9",
+      "label": "DjMaRiiO",
+      "category": "Gaming Clasico",
+      "community": 4,
+      "pagerank": 0.026261,
+      "betweenness": 0.016181,
+      "degree": 4,
+      "val": 6.55
+    },
+    {
+      "id": "10",
+      "label": "Alexelcapo",
+      "category": "Variety",
+      "community": 2,
+      "pagerank": 0.0388,
+      "betweenness": 0.192982,
+      "degree": 5,
+      "val": 9.21
+    },
+    {
+      "id": "11",
+      "label": "BaityBait",
+      "category": "Review",
+      "community": 2,
+      "pagerank": 0.025097,
+      "betweenness": 0.024966,
+      "degree": 3,
+      "val": 6.3
+    },
+    {
+      "id": "12",
+      "label": "Joseju",
+      "category": "Review",
+      "community": 2,
+      "pagerank": 0.025097,
+      "betweenness": 0.024966,
+      "degree": 3,
+      "val": 6.3
+    },
+    {
+      "id": "13",
+      "label": "DayoScript",
+      "category": "Review",
+      "community": 2,
+      "pagerank": 0.017973,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.79
+    },
+    {
+      "id": "14",
+      "label": "Nate Gentile",
+      "category": "Tech",
+      "community": 3,
+      "pagerank": 0.029499,
+      "betweenness": 0.070963,
+      "degree": 4,
+      "val": 7.23
+    },
+    {
+      "id": "15",
+      "label": "SFDX Show",
+      "category": "Tech",
+      "community": 3,
+      "pagerank": 0.023261,
+      "betweenness": 0.001687,
+      "degree": 3,
+      "val": 5.91
+    },
+    {
+      "id": "16",
+      "label": "DotCSV",
+      "category": "Tech",
+      "community": 3,
+      "pagerank": 0.029096,
+      "betweenness": 0.051282,
+      "degree": 4,
+      "val": 7.15
+    },
+    {
+      "id": "17",
+      "label": "Jordi Wild",
+      "category": "Podcast",
+      "community": 3,
+      "pagerank": 0.034797,
+      "betweenness": 0.346604,
+      "degree": 5,
+      "val": 8.36
+    },
+    {
+      "id": "18",
+      "label": "Tamayo",
+      "category": "Investigacion",
+      "community": 3,
+      "pagerank": 0.016411,
+      "betweenness": 0.02238,
+      "degree": 2,
+      "val": 4.46
+    },
+    {
+      "id": "19",
+      "label": "QuantumFracture",
+      "category": "Ciencia",
+      "community": 3,
+      "pagerank": 0.023191,
+      "betweenness": 0.004948,
+      "degree": 3,
+      "val": 5.9
+    },
+    {
+      "id": "20",
+      "label": "Javier Santaolalla",
+      "category": "Ciencia",
+      "community": 3,
+      "pagerank": 0.022982,
+      "betweenness": 0.043972,
+      "degree": 3,
+      "val": 5.85
+    },
+    {
+      "id": "21",
+      "label": "La Gata de Schrodinger",
+      "category": "Ciencia",
+      "community": 3,
+      "pagerank": 0.023808,
+      "betweenness": 0.002024,
+      "degree": 3,
+      "val": 6.03
+    },
+    {
+      "id": "22",
+      "label": "Gerard Romero",
+      "category": "Deportes",
+      "community": 4,
+      "pagerank": 0.014439,
+      "betweenness": 0.019134,
+      "degree": 2,
+      "val": 4.04
+    },
+    {
+      "id": "23",
+      "label": "Spursito",
+      "category": "Deportes",
+      "community": 4,
+      "pagerank": 0.019684,
+      "betweenness": 0.020821,
+      "degree": 3,
+      "val": 5.15
+    },
+    {
+      "id": "24",
+      "label": "Juan Guarnizo",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.038224,
+      "betweenness": 0.088799,
+      "degree": 6,
+      "val": 9.09
+    },
+    {
+      "id": "25",
+      "label": "AriGameplays",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.014602,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.07
+    },
+    {
+      "id": "26",
+      "label": "Rivers",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.020236,
+      "betweenness": 0.024998,
+      "degree": 3,
+      "val": 5.27
+    },
+    {
+      "id": "27",
+      "label": "Spreen",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.021698,
+      "betweenness": 0.004129,
+      "degree": 3,
+      "val": 5.58
+    },
+    {
+      "id": "28",
+      "label": "Quackity",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.021032,
+      "betweenness": 0.044502,
+      "degree": 3,
+      "val": 5.44
+    },
+    {
+      "id": "29",
+      "label": "Roier",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.021271,
+      "betweenness": 0.009334,
+      "degree": 3,
+      "val": 5.49
+    },
+    {
+      "id": "30",
+      "label": "ElMariana",
+      "category": "LATAM",
+      "community": 0,
+      "pagerank": 0.021046,
+      "betweenness": 0.01372,
+      "degree": 3,
+      "val": 5.44
+    },
+    {
+      "id": "31",
+      "label": "Knekro",
+      "category": "Variety",
+      "community": 2,
+      "pagerank": 0.022051,
+      "betweenness": 0.003374,
+      "degree": 3,
+      "val": 5.65
+    },
+    {
+      "id": "32",
+      "label": "Masi",
+      "category": "Streamer",
+      "community": 2,
+      "pagerank": 0.009535,
+      "betweenness": 0.0,
+      "degree": 1,
+      "val": 3.0
+    },
+    {
+      "id": "33",
+      "label": "ElRichMC",
+      "category": "Gaming Clasico",
+      "community": 2,
+      "pagerank": 0.010346,
+      "betweenness": 0.0,
+      "degree": 1,
+      "val": 3.17
+    },
+    {
+      "id": "34",
+      "label": "Mangel",
+      "category": "Gaming Clasico",
+      "community": 4,
+      "pagerank": 0.014328,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.02
+    },
+    {
+      "id": "35",
+      "label": "aLexBY11",
+      "category": "Gaming Clasico",
+      "community": 4,
+      "pagerank": 0.025745,
+      "betweenness": 0.017396,
+      "degree": 4,
+      "val": 6.44
+    },
+    {
+      "id": "36",
+      "label": "Nil Ojeda",
+      "category": "IRL",
+      "community": 1,
+      "pagerank": 0.028646,
+      "betweenness": 0.099865,
+      "degree": 4,
+      "val": 7.05
+    },
+    {
+      "id": "37",
+      "label": "Misho",
+      "category": "IRL",
+      "community": 1,
+      "pagerank": 0.017108,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.61
+    },
+    {
+      "id": "38",
+      "label": "Guanyar",
+      "category": "IRL",
+      "community": 1,
+      "pagerank": 0.017108,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.61
+    },
+    {
+      "id": "39",
+      "label": "Luzu",
+      "category": "Gaming Clasico",
+      "community": 4,
+      "pagerank": 0.014548,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.06
+    },
+    {
+      "id": "40",
+      "label": "Croma",
+      "category": "Tech",
+      "community": 3,
+      "pagerank": 0.01661,
+      "betweenness": 0.0,
+      "degree": 2,
+      "val": 4.5
+    }
+  ],
+  "links": [
+    {
+      "source": "1",
+      "target": "2"
+    },
+    {
+      "source": "1",
+      "target": "3"
+    },
+    {
+      "source": "1",
+      "target": "4"
+    },
+    {
+      "source": "1",
+      "target": "5"
+    },
+    {
+      "source": "1",
+      "target": "6"
+    },
+    {
+      "source": "1",
+      "target": "22"
+    },
+    {
+      "source": "1",
+      "target": "23"
+    },
+    {
+      "source": "1",
+      "target": "24"
+    },
+    {
+      "source": "1",
+      "target": "26"
+    },
+    {
+      "source": "1",
+      "target": "17"
+    },
+    {
+      "source": "1",
+      "target": "36"
+    },
+    {
+      "source": "2",
+      "target": "3"
+    },
+    {
+      "source": "2",
+      "target": "24"
+    },
+    {
+      "source": "2",
+      "target": "25"
+    },
+    {
+      "source": "3",
+      "target": "4"
+    },
+    {
+      "source": "3",
+      "target": "6"
+    },
+    {
+      "source": "3",
+      "target": "7"
+    },
+    {
+      "source": "3",
+      "target": "34"
+    },
+    {
+      "source": "3",
+      "target": "35"
+    },
+    {
+      "source": "3",
+      "target": "28"
+    },
+    {
+      "source": "4",
+      "target": "5"
+    },
+    {
+      "source": "4",
+      "target": "10"
+    },
+    {
+      "source": "4",
+      "target": "32"
+    },
+    {
+      "source": "4",
+      "target": "31"
+    },
+    {
+      "source": "5",
+      "target": "31"
+    },
+    {
+      "source": "6",
+      "target": "7"
+    },
+    {
+      "source": "6",
+      "target": "23"
+    },
+    {
+      "source": "6",
+      "target": "36"
+    },
+    {
+      "source": "7",
+      "target": "8"
+    },
+    {
+      "source": "7",
+      "target": "9"
+    },
+    {
+      "source": "7",
+      "target": "35"
+    },
+    {
+      "source": "7",
+      "target": "39"
+    },
+    {
+      "source": "8",
+      "target": "9"
+    },
+    {
+      "source": "8",
+      "target": "35"
+    },
+    {
+      "source": "8",
+      "target": "39"
+    },
+    {
+      "source": "9",
+      "target": "22"
+    },
+    {
+      "source": "9",
+      "target": "23"
+    },
+    {
+      "source": "10",
+      "target": "11"
+    },
+    {
+      "source": "10",
+      "target": "12"
+    },
+    {
+      "source": "10",
+      "target": "31"
+    },
+    {
+      "source": "10",
+      "target": "33"
+    },
+    {
+      "source": "11",
+      "target": "12"
+    },
+    {
+      "source": "11",
+      "target": "13"
+    },
+    {
+      "source": "12",
+      "target": "13"
+    },
+    {
+      "source": "14",
+      "target": "15"
+    },
+    {
+      "source": "14",
+      "target": "16"
+    },
+    {
+      "source": "14",
+      "target": "40"
+    },
+    {
+      "source": "14",
+      "target": "17"
+    },
+    {
+      "source": "15",
+      "target": "16"
+    },
+    {
+      "source": "15",
+      "target": "40"
+    },
+    {
+      "source": "16",
+      "target": "19"
+    },
+    {
+      "source": "16",
+      "target": "17"
+    },
+    {
+      "source": "17",
+      "target": "18"
+    },
+    {
+      "source": "17",
+      "target": "20"
+    },
+    {
+      "source": "18",
+      "target": "21"
+    },
+    {
+      "source": "19",
+      "target": "20"
+    },
+    {
+      "source": "19",
+      "target": "21"
+    },
+    {
+      "source": "20",
+      "target": "21"
+    },
+    {
+      "source": "24",
+      "target": "25"
+    },
+    {
+      "source": "24",
+      "target": "26"
+    },
+    {
+      "source": "24",
+      "target": "29"
+    },
+    {
+      "source": "24",
+      "target": "30"
+    },
+    {
+      "source": "26",
+      "target": "30"
+    },
+    {
+      "source": "27",
+      "target": "28"
+    },
+    {
+      "source": "27",
+      "target": "29"
+    },
+    {
+      "source": "27",
+      "target": "30"
+    },
+    {
+      "source": "28",
+      "target": "29"
+    },
+    {
+      "source": "34",
+      "target": "35"
+    },
+    {
+      "source": "36",
+      "target": "37"
+    },
+    {
+      "source": "36",
+      "target": "38"
+    },
+    {
+      "source": "37",
+      "target": "38"
+    }
+  ]
+}

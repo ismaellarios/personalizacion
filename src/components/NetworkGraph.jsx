@@ -1,0 +1,169 @@
+import { useRef, useCallback, useEffect, useState } from 'react'
+import ForceGraph2D from 'react-force-graph-2d'
+import { getCommunityColor } from '../hooks/useGraphData'
+
+export default function NetworkGraph({
+  nodes,
+  links,
+  onNodeClick,
+  highlightCommunity, // null | number
+}) {
+  const graphRef = useRef(null)
+  const containerRef = useRef(null)
+  const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight })
+  const [hoveredNode, setHoveredNode] = useState(null)
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
+
+  // Responsive resize
+  useEffect(() => {
+    const observer = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        setDimensions({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height,
+        })
+      }
+    })
+    if (containerRef.current) observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
+
+  // Custom canvas node renderer with glow effect
+  const nodeCanvasObject = useCallback((node, ctx, globalScale) => {
+    const color   = getCommunityColor(node.community)
+    const radius  = node.val ?? 5
+    const isDimmed = highlightCommunity !== null && node.community !== highlightCommunity
+
+    // Glow halo (only for non-dimmed)
+    if (!isDimmed) {
+      const glowRadius = radius * 2.2
+      const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, glowRadius)
+      gradient.addColorStop(0, color + '55')
+      gradient.addColorStop(1, color + '00')
+      ctx.beginPath()
+      ctx.arc(node.x, node.y, glowRadius, 0, 2 * Math.PI)
+      ctx.fillStyle = gradient
+      ctx.fill()
+    }
+
+    // Node circle
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI)
+    ctx.fillStyle = isDimmed ? 'rgba(30,40,60,0.3)' : color
+    ctx.fill()
+
+    // Node border
+    ctx.strokeStyle = isDimmed ? 'rgba(100,120,160,0.2)' : color
+    ctx.lineWidth = isDimmed ? 0.5 : 1.5
+    ctx.stroke()
+
+    // Label (only when zoomed in enough or node is large)
+    const labelThreshold = 3
+    if (globalScale >= labelThreshold || radius > 8) {
+      const label = node.label
+      const fontSize = Math.max(10 / globalScale, 3)
+      ctx.font = `600 ${fontSize}px Inter, sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillStyle = isDimmed ? 'rgba(150,170,200,0.3)' : '#ffffff'
+      ctx.fillText(label, node.x, node.y + radius + fontSize * 0.9)
+    }
+  }, [highlightCommunity])
+
+  const nodePointerAreaPaint = useCallback((node, color, ctx) => {
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, (node.val ?? 5) + 3, 0, 2 * Math.PI)
+    ctx.fillStyle = color
+    ctx.fill()
+  }, [])
+
+  // Click: center camera on node + notify parent
+  const handleNodeClick = useCallback((node) => {
+    if (graphRef.current) {
+      graphRef.current.centerAt(node.x, node.y, 800)
+      graphRef.current.zoom(5, 800)
+    }
+    onNodeClick(node)
+  }, [onNodeClick])
+
+  // Hover
+  const handleNodeHover = useCallback((node, _prevNode, evt) => {
+    setHoveredNode(node || null)
+    if (evt) {
+      setTooltipPos({ x: evt.clientX, y: evt.clientY })
+    }
+  }, [])
+
+  // Mouse move to keep tooltip following
+  const handleMouseMove = useCallback((evt) => {
+    if (hoveredNode) {
+      setTooltipPos({ x: evt.clientX, y: evt.clientY })
+    }
+  }, [hoveredNode])
+
+  // Link color
+  const linkColor = useCallback((link) => {
+    if (highlightCommunity === null) return 'rgba(0, 245, 255, 0.12)'
+    const sourceNode = typeof link.source === 'object' ? link.source : { community: -1 }
+    const targetNode = typeof link.target === 'object' ? link.target : { community: -1 }
+    const isHighlighted =
+      sourceNode.community === highlightCommunity &&
+      targetNode.community === highlightCommunity
+    return isHighlighted ? 'rgba(0, 245, 255, 0.4)' : 'rgba(50, 60, 80, 0.15)'
+  }, [highlightCommunity])
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ width: '100vw', height: '100vh', position: 'absolute', inset: 0, zIndex: 0 }}
+      onMouseMove={handleMouseMove}
+    >
+      <ForceGraph2D
+        ref={graphRef}
+        graphData={{ nodes, links }}
+        width={dimensions.width}
+        height={dimensions.height}
+        backgroundColor="transparent"
+        nodeCanvasObject={nodeCanvasObject}
+        nodePointerAreaPaint={nodePointerAreaPaint}
+        onNodeClick={handleNodeClick}
+        onNodeHover={handleNodeHover}
+        linkColor={linkColor}
+        linkWidth={1}
+        linkDirectionalParticles={2}
+        linkDirectionalParticleWidth={1.5}
+        linkDirectionalParticleColor={() => '#00f5ff'}
+        linkDirectionalParticleSpeed={0.004}
+        enableNodeDrag={true}
+        enableZoomInteraction={true}
+        enablePanInteraction={true}
+        cooldownTicks={120}
+        d3AlphaDecay={0.02}
+        d3VelocityDecay={0.3}
+        onEngineStop={() => {
+          // After simulation settles, do a gentle zoom-fit
+          if (graphRef.current) {
+            graphRef.current.zoomToFit(600, 80)
+          }
+        }}
+      />
+
+      {/* Tooltip */}
+      {hoveredNode && (
+        <div
+          className="graph-tooltip"
+          style={{
+            left: tooltipPos.x,
+            top: tooltipPos.y,
+            opacity: hoveredNode ? 1 : 0,
+          }}
+        >
+          {hoveredNode.label}
+          <span style={{ marginLeft: 8, opacity: 0.6, fontSize: '0.65rem' }}>
+            PR: {hoveredNode.pagerank?.toFixed(4)}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
