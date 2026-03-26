@@ -40,24 +40,71 @@ export default function ScatteredInfoPanels({
     {
       id: 1,
       buttonPos: { top: 16, right: 16 },
-      title: 'Persona 2: Metodología',
-      shortTitle: 'Metodología',
+      title: 'Métricas globales de la red',
+      shortTitle: 'Métricas globales',
       icon: <BarChart2 size={20} />,
       color: '#34d399',
       content: (
         <div className="script-content presentation-mode">
-          <ul className="talking-points">
-            <li><strong>Ingesta de datos:</strong> Carga de archivo de red y limpieza básica.</li>
-            <li><strong>Visión global:</strong> Cálculo de Densidad, Componentes, Distancia y Diámetro.</li>
-            <li><strong>Análisis de Grado:</strong> ¿Cuántas conexiones tiene cada uno? (Distribución desigual).</li>
-            <li><strong>Métricas de Centralidad:</strong>
-              <ul>
-                <li><em>Degree:</em> El más conectado.</li>
-                <li><em>Betweenness:</em> El "puente" estratégico.</li>
-              </ul>
-            </li>
-            <li><strong>Community Detection:</strong> Algoritmo de Louvain para encontrar grupos internos.</li>
-          </ul>
+          <div className="slide-block" style={{ borderLeftColor: '#34d399' }}>
+            <p>El análisis del grafo revela una <strong>única componente conectada</strong> (la componente gigante que abarca el 100% de la red), lo que indica que todos los creadores del dataset están conectados entre sí de forma directa o indirecta.</p>
+          </div>
+
+          <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>Métricas globales de la red analizada:</p>
+
+          <div className="stats-table-wrapper">
+            <table className="stats-table">
+              <thead>
+                <tr>
+                  <th>MÉTRICA</th>
+                  <th>VALOR</th>
+                  <th>INTERPRETACIÓN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Nodos</td>
+                  <td>40</td>
+                  <td>Número total de miembros analizados en la red.</td>
+                </tr>
+                <tr>
+                  <td>Aristas</td>
+                  <td>71</td>
+                  <td>Número total de interacciones sociales observadas.</td>
+                </tr>
+                <tr>
+                  <td className="highlight">Grado medio</td>
+                  <td className="highlight">3.55</td>
+                  <td>De media, cada miembro interactúa con otros 3 o 4 miembros.</td>
+                </tr>
+                <tr>
+                  <td>Densidad</td>
+                  <td>0.091</td>
+                  <td>Es una red dispersa. Solo el 9.1% de las conexiones posibles existen.</td>
+                </tr>
+                <tr>
+                  <td className="highlight">Clustering</td>
+                  <td className="highlight">0.3108</td>
+                  <td>Probabilidad del 31.08% de que dos amigos de un creador sean amigos entre sí.</td>
+                </tr>
+                <tr>
+                  <td>Distancia media</td>
+                  <td>3.37</td>
+                  <td>Separación media entre dos creadores de algo más de 3 saltos.</td>
+                </tr>
+                <tr>
+                  <td className="highlight">Diámetro</td>
+                  <td className="highlight">7</td>
+                  <td>Distancia máxima entre los dos nodos más alejados (7 saltos).</td>
+                </tr>
+                <tr>
+                  <td>Asortatividad</td>
+                  <td>0.0347</td>
+                  <td>Red ligeramente asortativa. Nodos de alto grado tienden a conectarse entre sí.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       )
     },
@@ -342,6 +389,58 @@ export default function ScatteredInfoPanels({
       <style>{`
         .script-content p {
           margin-bottom: 24px;
+        }
+
+        .stats-table-wrapper {
+          margin-top: 15px;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(15, 23, 42, 0.3);
+        }
+
+        .stats-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.95rem;
+        }
+
+        .stats-table th {
+          background: rgba(52, 211, 153, 0.2);
+          color: #34d399;
+          text-align: left;
+          padding: 12px 15px;
+          font-family: 'Orbitron', sans-serif;
+          font-size: 0.8rem;
+          letter-spacing: 1px;
+          border-bottom: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .stats-table td {
+          padding: 10px 15px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          color: #cbd5e1;
+          line-height: 1.4;
+        }
+
+        .stats-table tr:last-child td {
+          border-bottom: none;
+        }
+
+        .stats-table tr:hover {
+          background: rgba(255, 255, 255, 0.03);
+        }
+
+        .stats-table td:nth-child(2) {
+          font-family: 'Orbitron', sans-serif;
+          color: #fff;
+          font-weight: bold;
+          width: 80px;
+        }
+
+        .stats-table td.highlight {
+          color: #34d399;
         }
         
         .slide-block {
