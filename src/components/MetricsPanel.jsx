@@ -25,7 +25,7 @@ const CustomTooltip = ({ active, payload }) => {
   return null
 }
 
-export default function MetricsPanel({ top10 }) {
+export default function MetricsPanel({ top10, viewMode, setViewMode }) {
   // Format for recharts horizontal bar: value is betweenness * 1000 for readability
   const data = top10.map(n => ({
     ...n,
@@ -108,6 +108,45 @@ export default function MetricsPanel({ top10 }) {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* View Mode Controls */}
+      <div style={{
+        marginTop: 16,
+        padding: '12px 10px',
+        background: 'rgba(0, 245, 255, 0.05)',
+        border: '1px solid rgba(0, 245, 255, 0.1)',
+        borderRadius: 8,
+      }}>
+        <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, textAlign: 'center' }}>
+          Modo de Visualización
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {[
+            { id: 'normal', label: 'Nodos Individuales' },
+            { id: 'louvain', label: 'Comunidades (Louvain)' },
+            { id: 'betweenness', label: 'Heatmap (Betweenness)' }
+          ].map(mode => (
+            <button
+              key={mode.id}
+              onClick={() => setViewMode(mode.id)}
+              style={{
+                background: viewMode === mode.id ? 'var(--cyan)' : 'rgba(255, 255, 255, 0.05)',
+                color: viewMode === mode.id ? '#020408' : '#e2e8f0',
+                border: viewMode === mode.id ? '1px solid var(--cyan)' : '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '6px 12px',
+                borderRadius: 4,
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                fontWeight: viewMode === mode.id ? 700 : 500,
+                transition: 'all 0.2s',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )

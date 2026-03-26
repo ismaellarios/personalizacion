@@ -13,6 +13,7 @@ export default function App() {
   const [selectedNode, setSelectedNode] = useState(null)
   const [highlightCommunity, setHighlightCommunity] = useState(null)
   const [activeSection, setActiveSection] = useState(null)
+  const [viewMode, setViewMode] = useState('louvain')
 
   const handleNodeClick = useCallback((node) => {
     setSelectedNode(node)
@@ -37,6 +38,8 @@ export default function App() {
           links={links}
           onNodeClick={handleNodeClick}
           highlightCommunity={highlightCommunity}
+          viewMode={viewMode}
+          maxBetweenness={maxBetweenness}
         />
       </div>
 
@@ -50,7 +53,7 @@ export default function App() {
         <TitlePanel />
 
         {/* ── Overlay: Metrics Panel (left) ── */}
-        <MetricsPanel top10={top10Betweenness} />
+        <MetricsPanel top10={top10Betweenness} viewMode={viewMode} setViewMode={setViewMode} />
 
         {/* ── Overlay: Details Panel (right) ── */}
         <DetailsPanel

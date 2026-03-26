@@ -7,6 +7,8 @@ export default function NetworkGraph({
   links,
   onNodeClick,
   highlightCommunity, // null | number
+  viewMode = 'louvain',
+  maxBetweenness = 1
 }) {
   const graphRef = useRef(null)
   const containerRef = useRef(null)
@@ -32,7 +34,30 @@ export default function NetworkGraph({
   const nodeCanvasObject = useCallback((node, ctx, globalScale) => {
     if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
     
-    const color   = getCommunityColor(node.group)
+    let color = '#94a3b8';
+    if (viewMode === 'normal') {
+      // Normal: Unique color per node
+      const identifier = node.id || node.label || '0';
+      const colors = [
+        '#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', 
+        '#ec4899', '#0ea5e9', '#eab308', '#14b8a6', '#f97316',
+        '#a3e635', '#2dd4bf', '#a78bfa', '#fb7185', '#60a5fa'
+      ];
+      let hash = 0;
+      for (let i = 0; i < String(identifier).length; i++) {
+        hash = String(identifier).charCodeAt(i) + ((hash << 5) - hash);
+      }
+      color = colors[Math.abs(hash) % colors.length];
+    } else if (viewMode === 'betweenness') {
+      // Heatmap scale for betweenness (Blue -> Purple -> Red -> Orange -> Yellow)
+      const HEAT_COLORS = ['#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e', '#ef4444', '#f97316', '#eab308'];
+      const intensityIdx = Math.floor(Math.min(0.99, (node.betweenness || 0) / Math.max(0.0001, maxBetweenness)) * HEAT_COLORS.length);
+      color = HEAT_COLORS[intensityIdx];
+    } else {
+      // Louvain (default)
+      color = getCommunityColor(node.group);
+    }
+
     const radius  = node.val ?? 5
     const isDimmed = highlightCommunity !== null && node.group !== highlightCommunity
 
@@ -70,7 +95,7 @@ export default function NetworkGraph({
       ctx.fillStyle = isDimmed ? 'rgba(150,170,200,0.3)' : '#ffffff'
       ctx.fillText(label, node.x, node.y + radius + fontSize * 0.9)
     }
-  }, [highlightCommunity])
+  }, [highlightCommunity, viewMode, maxBetweenness])
 
   const nodePointerAreaPaint = useCallback((node, color, ctx) => {
     if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
