@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect, useState, useMemo } from 'react'
 import ForceGraph2D from 'react-force-graph-2d'
+import { forceCollide } from 'd3-force'
 import { getCommunityColor } from '../hooks/useGraphData'
 
 export default function NetworkGraph({
@@ -20,8 +21,10 @@ export default function NetworkGraph({
   , [highlightNodes])
 
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight })
-  const [hoveredNode, setHoveredNode] = useState(null)
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
+  const tooltipRef = useRef(null)
+
+  // Memoize graphData to avoid resets on every render
+  const graphData = useMemo(() => ({ nodes, links }), [nodes, links])
 
   // Responsive resize
   useEffect(() => {
@@ -35,6 +38,22 @@ export default function NetworkGraph({
     })
     if (containerRef.current) observer.observe(containerRef.current)
     return () => observer.disconnect()
+  }, [])
+
+  // Physics adjustments to prevent nodes from overlapping while keeping original density
+  useEffect(() => {
+    if (graphRef.current) {
+      // Revert to tighter default-like distances (-30 to -60) but not massive scattering
+      graphRef.current.d3Force('charge').strength(-80)
+      graphRef.current.d3Force('link').distance(35)
+      
+      // Add collision force to strictly prevent "bolas" overlapping
+      // Radius includes node val + border/glow padding (about 4 extra pixels)
+      graphRef.current.d3Force(
+        'collide',
+        forceCollide(node => (node.val ?? 5) + 4).iterations(2)
+      )
+    }
   }, [])
 
   // Custom canvas node renderer with glow effect
@@ -123,20 +142,44 @@ export default function NetworkGraph({
     onNodeClick(node)
   }, [onNodeClick])
 
-  // Hover
+  // Hover: update tooltip content via ref directly
   const handleNodeHover = useCallback((node, _prevNode, evt) => {
-    setHoveredNode(node || null)
-    if (evt) {
-      setTooltipPos({ x: evt.clientX, y: evt.clientY })
+    if (tooltipRef.current) {
+      if (node) {
+        // Build tooltip content dynamically
+        tooltipRef.current.innerHTML = `
+          ${node.label}
+          <span style="margin-left: 8px; opacity: 0.6; font-size: 0.65rem;">
+            BC: ${node.betweenness?.toFixed(4) || 0} | DC: ${node.degree_centrality?.toFixed(4) || 0}
+          </span>
+        `
+        tooltipRef.current.style.opacity = '1'
+        if (evt) {
+          tooltipRef.current.style.left = `${evt.clientX + 15}px`
+          tooltipRef.current.style.top = `${evt.clientY + 15}px`
+        }
+      } else {
+        tooltipRef.current.style.opacity = '0'
+      }
     }
   }, [])
 
   // Mouse move to keep tooltip following
   const handleMouseMove = useCallback((evt) => {
-    if (hoveredNode) {
-      setTooltipPos({ x: evt.clientX, y: evt.clientY })
+    if (tooltipRef.current && tooltipRef.current.style.opacity === '1') {
+      tooltipRef.current.style.left = `${evt.clientX + 15}px`
+      tooltipRef.current.style.top = `${evt.clientY + 15}px`
     }
-  }, [hoveredNode])
+  }, [])
+
+  // Stable particle props
+  const getParticleColor = useCallback(() => '#00f5ff', [])
+
+  const handleEngineStop = useCallback(() => {
+    if (graphRef.current) {
+      graphRef.current.zoomToFit(600, 80)
+    }
+  }, [])
 
   // Link color
   const linkColor = useCallback((link) => {
@@ -167,7 +210,7 @@ export default function NetworkGraph({
     >
       <ForceGraph2D
         ref={graphRef}
-        graphData={{ nodes, links }}
+        graphData={graphData}
         width={dimensions.width}
         height={dimensions.height}
         backgroundColor="#020408"
@@ -179,7 +222,7 @@ export default function NetworkGraph({
         linkWidth={1}
         linkDirectionalParticles={2}
         linkDirectionalParticleWidth={1.5}
-        linkDirectionalParticleColor={() => '#00f5ff'}
+        linkDirectionalParticleColor={getParticleColor}
         linkDirectionalParticleSpeed={0.004}
         enableNodeDrag={true}
         enableZoomInteraction={true}
@@ -187,30 +230,29 @@ export default function NetworkGraph({
         cooldownTicks={120}
         d3AlphaDecay={0.02}
         d3VelocityDecay={0.3}
-        onEngineStop={() => {
-          // After simulation settles, do a gentle zoom-fit
-          if (graphRef.current) {
-            graphRef.current.zoomToFit(600, 80)
-          }
-        }}
+        onEngineStop={handleEngineStop}
       />
 
-      {/* Tooltip */}
-      {hoveredNode && (
-        <div
-          className="graph-tooltip"
-          style={{
-            left: tooltipPos.x,
-            top: tooltipPos.y,
-            opacity: hoveredNode ? 1 : 0,
-          }}
-        >
-          {hoveredNode.label}
-          <span style={{ marginLeft: 8, opacity: 0.6, fontSize: '0.65rem' }}>
-            BC: {hoveredNode.betweenness?.toFixed(4)} | DC: {hoveredNode.degree_centrality?.toFixed(4)}
-          </span>
-        </div>
-      )}
+      {/* Tooltip (rendered once, managed by ref) */}
+      <div
+        ref={tooltipRef}
+        style={{
+          position: 'fixed',
+          pointerEvents: 'none',
+          opacity: 0,
+          zIndex: 1000,
+          transition: 'opacity 0.2s ease',
+          background: 'rgba(10, 15, 30, 0.9)',
+          padding: '8px 12px',
+          borderRadius: '6px',
+          color: '#fff',
+          fontSize: '0.85rem',
+          fontFamily: 'Inter, sans-serif',
+          border: '1px solid rgba(0, 245, 255, 0.2)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+          whiteSpace: 'nowrap'
+        }}
+      />
     </div>
   )
 }
