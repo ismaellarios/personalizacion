@@ -1,4 +1,5 @@
-import { Target, BarChart2, Crosshair, Users, X, ChevronRight, ChevronLeft } from 'lucide-react'
+import { useState } from 'react'
+import { Target, BarChart2, Crosshair, Users, X, ChevronRight, ChevronLeft, Maximize2 } from 'lucide-react'
 
 export default function ScatteredInfoPanels({
   activeSection,
@@ -10,29 +11,27 @@ export default function ScatteredInfoPanels({
   highlightNodes,
   setHighlightNodes
 }) {
+  const [enlargedImage, setEnlargedImage] = useState(null)
 
   const sections = [
     {
       id: 0,
       buttonPos: { top: 16, left: 16 },
-      title: 'Persona 1: Introducción',
+      title: 'Introducción',
       shortTitle: 'Introducción',
       icon: <Target size={20} />,
       color: 'var(--cyan)',
       content: (
         <div className="script-content presentation-mode">
+          <div className="slide-block" style={{ borderLeftColor: 'var(--cyan)' }}>
+            <p><strong>Contexto del Proyecto:</strong> Análisis de la red social de YouTube Hispano utilizando un dataset de Kaggle con 40 creadores de contenido.</p>
+          </div>
+
           <ul className="talking-points">
-            <li><strong>Presentación:</strong> Nombres del equipo y objetivo principal.</li>
-            <li><strong>El enfoque:</strong> YouTube Hispano como un <em>sistema vivo</em>, no canales aislados.</li>
-            <li><strong>Conceptos clave:</strong> Nodos (canales) y Conexiones (relaciones).</li>
-            <li><strong>Preguntas clave:</strong>
-              <ul>
-                <li>¿Quiénes son más importantes?</li>
-                <li>¿Quiénes unen mundos distintos?</li>
-                <li>¿Cómo se organiza la comunidad?</li>
-              </ul>
-            </li>
-            <li><strong>Valor añadido:</strong> Identificar posiciones estratégicas en la red.</li>
+            <li><strong>Objetivos:</strong> Aplicar <em>Computación Social</em> para extraer métricas, identificar influyentes y entender agrupaciones.</li>
+            <li><strong>Metodología:</strong> Procesamiento con <strong>Python y NetworkX</strong> (Grafo no dirigido y no ponderado).</li>
+            <li><strong>Estadísticos:</strong> 40 nodos y 71 aristas. Cada canal incluye su categoría (Streamer, Gaming, Ciencia, Tech...).</li>
+            <li><strong>Hito Final:</strong> Detección de comunidades mediante el algoritmo de <strong>Louvain</strong>.</li>
           </ul>
         </div>
       )
@@ -111,19 +110,40 @@ export default function ScatteredInfoPanels({
     {
       id: 2,
       buttonPos: { bottom: 16, left: 16 },
-      title: 'Persona 3: Resultados principales',
-      shortTitle: 'Resultados',
+      title: 'Centralidades e Influencia',
+      shortTitle: 'Centralidades e Influencia',
       icon: <Crosshair size={20} />,
       color: '#f59e0b',
       content: (
         <div className="script-content presentation-mode">
+          <div className="slide-block" style={{ borderLeftColor: '#f59e0b' }}>
+            <p><strong>Centralidades:</strong> ¿Quién es importante y por qué? Analizamos el rol estratégico mediante tres métricas fundamentales:</p>
+          </div>
+
           <ul className="talking-points">
-            <li><strong>Diversidad de roles:</strong> No todos los canales con pocos subs son irrelevantes.</li>
-            <li><strong>El poder del puente:</strong> Los canales que conectan comunidades separadas.</li>
-            <li><strong>Estructura modular:</strong> Identificación de nichos cerrados muy fuertes.</li>
-            <li><strong>Ley de potencia:</strong> Pocos "Hubs" masivos frente a una "Larga cola" de pequeños.</li>
-            <li><strong>Impacto:</strong> La posición en la red pesa tanto o más que el número de seguidores.</li>
+            <li><strong>Degree Centrality (Grado):</strong> Importancia local. ¿Cuántas conexiones directas tiene este nodo?</li>
+            <li><strong>Betweenness Centrality (Intermediación):</strong> Nodos puente. ¿Conecta comunidades y controla el flujo de información?</li>
+            <li><strong>Clustering Coefficient (Agrupamiento):</strong> Cohesión del entorno. ¿Sus contactos también se conocen entre sí?</li>
           </ul>
+
+          <div style={{ display: 'flex', gap: '15px', marginTop: '15px', justifyContent: 'center' }}>
+            <div
+              className="zoom-card"
+              onClick={() => setEnlargedImage({ src: '/3_picture1.png', title: 'Distribución de Grados' })}
+              style={{ flex: 1, background: '#fff', padding: '10px', borderRadius: '12px', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '240px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+            >
+              <div className="zoom-icon"><Maximize2 size={14} /></div>
+              <img src="/3_picture1.png" alt="Métricas 1" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
+            </div>
+            <div
+              className="zoom-card"
+              onClick={() => setEnlargedImage({ src: '/3_picture2.png', title: 'Comparativa de Centralidades' })}
+              style={{ flex: 1, background: '#fff', padding: '10px', borderRadius: '12px', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '240px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+            >
+              <div className="zoom-icon"><Maximize2 size={14} /></div>
+              <img src="/3_picture2.png" alt="Métricas 2" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
+            </div>
+          </div>
         </div>
       )
     },
@@ -385,6 +405,37 @@ export default function ScatteredInfoPanels({
         )}
       </div>
 
+      {/* ── Image Zoom Overlay ── */}
+      {enlargedImage && (
+        <div
+          className="image-zoom-overlay animate-fadein"
+          onClick={() => setEnlargedImage(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.85)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '40px',
+            boxSizing: 'border-box'
+          }}
+        >
+          <div className="zoom-content" onClick={e => e.stopPropagation()}>
+            <div className="zoom-header">
+              <h3>{enlargedImage.title}</h3>
+              <button onClick={() => setEnlargedImage(null)}><X size={24} /></button>
+            </div>
+            <img src={enlargedImage.src} alt={enlargedImage.title} />
+          </div>
+        </div>
+      )}
+
       {/* Global styles for the script paragraphs and UI actions */}
       <style>{`
         .script-content p {
@@ -567,6 +618,77 @@ export default function ScatteredInfoPanels({
         .talking-points ul li::before {
           content: '•';
           color: rgba(255,255,255,0.4);
+        }
+
+        .zoom-card {
+          transition: all 0.3s;
+        }
+        .zoom-card:hover {
+          transform: translateY(-5px);
+          background: rgba(255,255,255,0.08) !important;
+          border-color: #f59e0b99 !important;
+        }
+        .zoom-icon {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: rgba(0,0,0,0.5);
+          color: white;
+          padding: 4px;
+          border-radius: 4px;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        .zoom-card:hover .zoom-icon {
+          opacity: 1;
+        }
+
+        .zoom-content {
+          background: #fff;
+          padding: 15px;
+          border-radius: 16px;
+          width: 95vw;
+          height: 90vh;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+        }
+
+        .zoom-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          color: #1e293b;
+        }
+
+        .zoom-header h3 {
+          margin: 0;
+          font-family: 'Orbitron', sans-serif;
+          font-size: 1.1rem;
+        }
+
+        .zoom-header button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #64748b;
+          transition: color 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .zoom-header button:hover {
+          color: #f43f5e;
+        }
+
+        .zoom-content img {
+          flex: 1;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          border-radius: 8px;
         }
 
       `}</style>
